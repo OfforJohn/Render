@@ -15,8 +15,9 @@ const app = express();
 
 // ───── Middleware ─────────────────────────────────────────────────────────────
 app.use(cors({ origin: "*" }));
+app.use(express.json({ limit: "10mb" }));
+app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
-app.use(express.json());
 
 // serve uploaded recordings and images
 app.use("/uploads/recordings", express.static("uploads/recordings"));
