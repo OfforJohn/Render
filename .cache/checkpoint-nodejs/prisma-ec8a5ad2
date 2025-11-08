@@ -1,16 +1,28 @@
 {
+<<<<<<< HEAD
   "last_reminder": 0,
   "cached_at": 1748383636195,
+=======
+  "last_reminder": 1750703077169,
+  "cached_at": 1750679478210,
+>>>>>>> bc67fe44c449fe32bce1d7ea822c32930fdd6026
   "version": "5.13.0",
   "cli_path": "/app/node_modules/.bin/prisma",
   "output": {
     "product": "prisma",
     "previous_version": "5.13.0",
     "checkpoint_version": 4,
+<<<<<<< HEAD
     "local_timestamp_without_timezone": "2025-05-27T22:07:15Z",
     "current_version": "6.8.2",
     "current_release_date": 1747413397,
     "client_event_id": "34486ec0-e2a4-441e-b061-924e035d76d7",
+=======
+    "local_timestamp_without_timezone": "2025-06-23T11:51:17Z",
+    "current_version": "6.10.1",
+    "current_release_date": 1750279497,
+    "client_event_id": "0b3fc9fa-a690-4131-a622-93b88038a7f4",
+>>>>>>> bc67fe44c449fe32bce1d7ea822c32930fdd6026
     "current_download_url": "https://github.com/prisma/prisma",
     "package": "prisma",
     "release_tag": "latest",
@@ -29,14 +41,22 @@
   },
   "product": "prisma",
   "cli_install_type": "local",
+<<<<<<< HEAD
   "local_timestamp": "2025-05-21T11:00:26Z",
+=======
+  "local_timestamp": "2025-06-23T18:41:14Z",
+>>>>>>> bc67fe44c449fe32bce1d7ea822c32930fdd6026
   "project_hash": "bac12787",
   "cli_path_hash": "ec8a5ad2",
   "endpoint": "https://checkpoint.prisma.io",
   "arch": "x64",
   "os": "linux",
   "node_version": "v16.14.2",
+<<<<<<< HEAD
   "command": "migrate reset",
+=======
+  "command": "generate",
+>>>>>>> bc67fe44c449fe32bce1d7ea822c32930fdd6026
   "schema_providers": [
     "mysql"
   ],

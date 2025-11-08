@@ -48,6 +48,8 @@ export const getMessages = async (req, res, next) => {
   }
 };
 
+
+
 export const addMessage = async (req, res, next) => {
   try {
     const prisma = getPrismaInstance();
@@ -76,7 +78,10 @@ export const addMessage = async (req, res, next) => {
 export const getInitialContactsWithMessages = async (req, res, next) => {
   try {
     const userId = parseInt(req.params.from);
+    console.log(`🔍 Fetching messages for userId: ${userId}`);
+
     const prisma = getPrismaInstance();
+
     const user = await prisma.user.findUnique({
       where: { id: userId },
       include: {
@@ -90,58 +95,66 @@ export const getInitialContactsWithMessages = async (req, res, next) => {
         },
       },
     });
+
+    if (!user) {
+      console.log("❌ User not found.");
+      return res.status(404).json({ message: "User not found." });
+    }
+
+    console.log(`✅ User found. Sent messages: ${user.sentMessages.length}, Received messages: ${user.recievedMessages.length}`);
+
     const messages = [...user.sentMessages, ...user.recievedMessages];
     messages.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+    console.log(`📦 Total messages combined and sorted: ${messages.length}`);
+
     const users = new Map();
     const messageStatusChange = [];
 
     messages.forEach((msg) => {
       const isSender = msg.senderId === userId;
       const calculatedId = isSender ? msg.recieverId : msg.senderId;
+
+      console.log(`🗂️ Processing message ID: ${msg.id}, isSender: ${isSender}, contactId: ${calculatedId}`);
+
       if (msg.messageStatus === "sent") {
         messageStatusChange.push(msg.id);
+        console.log(`📬 Message ID ${msg.id} status marked for "delivered"`);
       }
+
       if (!users.get(calculatedId)) {
-        const {
-          id,
-          type,
-          message,
-          messageStatus,
-          createdAt,
-          senderId,
-          recieverId,
-        } = msg;
-        let user = {
-          messageId: id,
-          type,
-          message,
-          messageStatus,
-          createdAt,
-          senderId,
-          recieverId,
+        let userObj = {
+          messageId: msg.id,
+          type: msg.type,
+          message: msg.message,
+          messageStatus: msg.messageStatus,
+          createdAt: msg.createdAt,
+          senderId: msg.senderId,
+          recieverId: msg.recieverId,
         };
+
         if (isSender) {
-          user = {
-            ...user,
+          userObj = {
+            ...userObj,
             ...msg.reciever,
             totalUnreadMessages: 0,
           };
         } else {
-          user = {
-            ...user,
+          userObj = {
+            ...userObj,
             ...msg.sender,
-            totalUnreadMessages: messageStatus !== "read" ? 1 : 0,
+            totalUnreadMessages: msg.messageStatus !== "read" ? 1 : 0,
           };
         }
-        users.set(calculatedId, {
-          ...user,
-        });
+
+        users.set(calculatedId, userObj);
+        console.log(`👤 Added new contact to map: ${calculatedId}, unread: ${userObj.totalUnreadMessages}`);
       } else if (msg.messageStatus !== "read" && !isSender) {
-        const user = users.get(calculatedId);
+        const existingUser = users.get(calculatedId);
         users.set(calculatedId, {
-          ...user,
-          totalUnreadMessages: user.totalUnreadMessages + 1,
+          ...existingUser,
+          totalUnreadMessages: existingUser.totalUnreadMessages + 1,
         });
+        console.log(`🔄 Updated unread count for user ${calculatedId}: ${existingUser.totalUnreadMessages + 1}`);
       }
     });
 
@@ -154,16 +167,25 @@ export const getInitialContactsWithMessages = async (req, res, next) => {
           messageStatus: "delivered",
         },
       });
+      console.log(`✅ Updated ${messageStatusChange.length} message(s) to "delivered" status.`);
+    } else {
+      console.log("ℹ️ No message status updates required.");
     }
 
+    console.log(`📤 Sending response with ${users.size} contacts.`);
     return res.status(200).json({
       users: Array.from(users.values()),
       onlineUsers: Array.from(onlineUsers.keys()),
     });
+
   } catch (err) {
+    console.error("🚨 Error in getInitialContactsWithMessages:", err);
     next(err);
   }
 };
+
+
+
 
 export const addAudioMessage = async (req, res, next) => {
   try {

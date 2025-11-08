@@ -126,3 +126,30 @@ npx prisma migrate reset
 npx prisma migrate reset
 npx prisma migrate reset
 npx prisma migrate reset
+<<<<<<< HEAD
+=======
+npx prisma migrate reset
+npx prisma migrate dev --name add_bot_replies
+npx prisma db reset
+npx prisma db reset
+npx prisma migrate reset
+npx prisma migrate reset
+npx prisma migrate reset
+npx prisma migrate reset
+npx prisma migrate reset
+npx prisma migrate reset
+npx prisma migrate dev --name addPhoneNumberToUser
+npx prisma migrate reset
+npx prisma migrate reset
+npx prisma migrate dev --name add_bot_reply
+npx prisma generate
+npx prisma generate
+npx prisma migrate dev --name add-bot-reply
+npx prisma generate
+npx prisma migrate dev --name add-bot-reply
+npx prisma db push
+npx prisma migrate reset
+npx prisma migrate reset
+npx prisma db push
+npx prisma generate
+>>>>>>> bc67fe44c449fe32bce1d7ea822c32930fdd6026
